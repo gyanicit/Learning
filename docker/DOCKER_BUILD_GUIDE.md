@@ -354,6 +354,52 @@ Stopping a container does not remove its image. To remove the stopped container:
 docker rm demo-app-container
 ```
 
+### Run with Docker Compose
+
+The project includes the custom-named `docker-compose-demoapp.yaml`. It defines the `demo` service, builds the image from the project's Dockerfile, tags it `demo-app:latest`, and publishes port 8080.
+
+Here is the complete current Compose file:
+
+```yaml
+services:
+  demo:
+    # Build this service's image from the Dockerfile in the project root.
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Give the built application image a recognizable local tag.
+    image: demo-app:latest
+
+    # Publish container port 8080 on host port 8080.
+    ports:
+      - "8080:8080"
+```
+
+Run this from the project root to build the image and start the app in the background:
+
+```sh
+docker compose -f docker-compose-demoapp.yaml up --build -d
+```
+
+`-f docker-compose-demoapp.yaml` selects the custom-named Compose file. `up` creates and starts the service. `--build` builds or refreshes the image first using the `build` settings in the file. `-d` runs it in the background. The build context `.` is the project directory containing the Dockerfile and `pom.xml`.
+
+Open the app at `http://localhost:8080/api/v1/diwali`. The expected response is `Happy Diwali`.
+
+Follow the service logs with:
+
+```sh
+docker compose -f docker-compose-demoapp.yaml logs -f demo
+```
+
+Stop and remove the Compose container and network with:
+
+```sh
+docker compose -f docker-compose-demoapp.yaml down
+```
+
+The image `demo-app:latest` remains available after `down`.
+
 ## 9. End-to-end command sequence
 
 Run these commands from the project root. The target build and shell inspection are optional; the final image build is sufficient to build and run the application.
@@ -384,5 +430,9 @@ docker stop demo-app-container
 - [Docker multi-stage builds](https://docs.docker.com/build/building/multi-stage/)
 - [Docker image ls reference](https://docs.docker.com/reference/cli/docker/image/ls/)
 - [Docker build cache](https://docs.docker.com/build/cache/)
+
+
+
+
 
 
