@@ -29,6 +29,8 @@ docker build -t my-app:latest .
 ```
 Build an image from the `Dockerfile` in the current directory and tag it `my-app:latest`.
 
+For a complete commented Spring Boot example covering the Dockerfile and the end-to-end build cycle, see [DOCKER_BUILD_GUIDE.md](./DOCKER_BUILD_GUIDE.md).
+
 ```bash
 docker tag my-app:latest username/my-app:latest
 ```
@@ -104,3 +106,4 @@ Follow logs from the Compose services.
 docker compose down
 ```
 Stop and remove the containers and network created for the Compose project.
+
