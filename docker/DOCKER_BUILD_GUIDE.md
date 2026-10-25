@@ -312,53 +312,61 @@ ls -la /workspace/target
 
 The packaged JAR should be in `/workspace/target`. Type `exit` to leave the shell.
 
-## 8. Run and verify the final image
+## 8. Approach A: build and run with Docker commands only
 
-Run in the foreground:
+This workflow uses `docker build` and `docker run` directly. It does not use a Compose file. Run all commands from the project root so `.` points to the directory containing the Dockerfile, `pom.xml`, and `src/`.
+
+### Build the final image
+
+```sh
+docker build --progress=plain -t demo-app:latest .
+```
+
+Docker follows the Dockerfile through the `build` stage and into the final `runtime` stage. The output is tagged `demo-app:latest`. This command creates the image; it does not start the application.
+
+### Start the image in the foreground
 
 ```sh
 docker run --rm -p 8080:8080 demo-app:latest
 ```
 
-Or run in the background:
+`docker run` creates and starts a container from the image. `-p 8080:8080` maps host port 8080 to container port 8080. `--rm` removes the container when it exits. This command stays attached to the terminal and displays application output; press Ctrl+C to stop the app.
+
+### Or start it in the background
 
 ```sh
 docker run -d --name demo-app-container -p 8080:8080 demo-app:latest
 ```
 
-The format is `docker run [OPTIONS] IMAGE [COMMAND] [ARGUMENTS]`. Put options before the image name. Here, `-d` runs detached, `--name` assigns a container name, and `-p 8080:8080` maps host port 8080 to container port 8080 (`host:container`).
-
-Open this URL on the same computer:
-
-```text
-http://localhost:8080/api/v1/diwali
-```
-
-The route is spelled `diwali`; the expected response is `Happy Diwali`.
-
-For a detached container, view application output with:
+`-d` runs the container in the background, and `--name` gives it a readable name. Follow its logs with:
 
 ```sh
 docker logs -f demo-app-container
 ```
 
-Stop it with:
+Press Ctrl+C to stop following the logs. The container keeps running. Stop the application with:
 
 ```sh
 docker stop demo-app-container
 ```
 
-Stopping a container does not remove its image. To remove the stopped container:
+This detached command does not use `--rm`, so the stopped container remains. Remove it with:
 
 ```sh
 docker rm demo-app-container
 ```
 
-### Run with Docker Compose
+Open `http://localhost:8080/api/v1/diwali` in a browser; the expected response is `Happy Diwali`.
 
-The project includes the custom-named `docker-compose-demoapp.yaml`. It defines the `demo` service, builds the image from the project's Dockerfile, tags it `demo-app:latest`, and publishes port 8080.
+The host port 8080 must be available. If another container already publishes that port, stop it before starting this one. A foreground `docker run` can be stopped with Ctrl+C; use `docker stop demo-app-container` for the named detached container.
 
-Here is the complete current Compose file:
+## 9. Approach B: build and run with Docker Compose
+
+This workflow uses the Compose file to build the image and manage the application container. The file is named `docker-compose-demoapp.yaml`, so pass it with `-f`. Run Compose from the project root.
+
+### Compose file
+
+The complete current `docker-compose-demoapp.yaml` is:
 
 ```yaml
 services:
@@ -376,60 +384,59 @@ services:
       - "8080:8080"
 ```
 
-Run this from the project root to build the image and start the app in the background:
+The `demo` service builds from the Dockerfile in the project root. `image` assigns the built image the same `demo-app:latest` tag used in the Docker-only workflow. `ports` publishes the app on host port 8080.
+
+### Build and start with Compose
 
 ```sh
 docker compose -f docker-compose-demoapp.yaml up --build -d
 ```
 
-`-f docker-compose-demoapp.yaml` selects the custom-named Compose file. `up` creates and starts the service. `--build` builds or refreshes the image first using the `build` settings in the file. `-d` runs it in the background. The build context `.` is the project directory containing the Dockerfile and `pom.xml`.
+`-f` selects the custom-named Compose file. `up` creates and starts its service. `--build` asks Compose to build the image from the Dockerfile before starting it. `-d` runs the service in the background. Compose uses the `build` settings in the file; you do not need a separate `docker build` command for this workflow.
 
-Open the app at `http://localhost:8080/api/v1/diwali`. The expected response is `Happy Diwali`.
+Open `http://localhost:8080/api/v1/diwali`; the expected response is `Happy Diwali`.
 
-Follow the service logs with:
+View the service status with:
+
+```sh
+docker compose -f docker-compose-demoapp.yaml ps
+```
+
+Follow its logs with:
 
 ```sh
 docker compose -f docker-compose-demoapp.yaml logs -f demo
 ```
 
-Stop and remove the Compose container and network with:
+Press Ctrl+C to stop following logs; the service keeps running. Stop and remove the Compose container and network with:
 
 ```sh
 docker compose -f docker-compose-demoapp.yaml down
 ```
 
-The image `demo-app:latest` remains available after `down`.
+The `demo-app:latest` image remains available after `down`. As with the Docker-only workflow, host port 8080 must be available. Stop a directly started container before starting the Compose service on the same port.
 
-## 9. End-to-end command sequence
+## 10. How the two workflows differ
 
-Run these commands from the project root. The target build and shell inspection are optional; the final image build is sufficient to build and run the application.
+The Dockerfile is used in both workflows. It defines how the image is built. Compose adds a reusable service configuration for building, port mapping, and container lifecycle commands.
 
-```sh
-# Build the final runtime image and show stage progress.
-docker build --progress=plain -t demo-app:latest .
+| Task | Docker commands only | Docker Compose |
+|---|---|---|
+| Build and start | `docker build -t demo-app:latest .`, then `docker run ...` | `docker compose -f docker-compose-demoapp.yaml up --build -d` |
+| View logs | `docker logs -f demo-app-container` | `docker compose -f docker-compose-demoapp.yaml logs -f demo` |
+| Stop/remove container | `docker stop demo-app-container`, then `docker rm demo-app-container` | `docker compose -f docker-compose-demoapp.yaml down` |
+| Configuration source | Dockerfile plus options typed for each `docker run` | Dockerfile plus settings in `docker-compose-demoapp.yaml` |
 
-# Optional: build only the Maven stage as a separately tagged image.
-docker build --target build --progress=plain -t demo-app-build:latest .
-
-# List the images.
-docker image ls
-
-# Optional: inspect the Maven stage's files.
-docker run --rm -it --entrypoint /bin/sh demo-app-build:latest
-
-# Start the final application in the background.
-docker run -d --name demo-app-container -p 8080:8080 demo-app:latest
-
-# Follow logs, then stop the container when finished.
-docker logs -f demo-app-container
-docker stop demo-app-container
-```
+Section 6's `docker build --target build -t demo-app-build:latest .` is an optional way to create an image for inspecting the Maven build stage. It is not needed to start the app in either workflow.
 
 ## Further reading
 
 - [Docker multi-stage builds](https://docs.docker.com/build/building/multi-stage/)
 - [Docker image ls reference](https://docs.docker.com/reference/cli/docker/image/ls/)
 - [Docker build cache](https://docs.docker.com/build/cache/)
+
+
+
 
 
 
