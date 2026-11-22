@@ -38,14 +38,14 @@ This file links to the documents and configuration files in this repository, gro
 
 ### Pods
 
-- [Pod Guide](./k8s/pod/Pod.md) — Pod structure, lifecycle, components, creation, and common `kubectl` commands.
-- [Example Pod Manifest](./k8s/pod/pod.yaml) — Manifest for the `nginx` Pod.
+- [Pod Guide](k8s/workload-management/Pod/Pod.md) — Pod structure, lifecycle, components, creation, and common `kubectl` commands.
+- [Example Pod Manifest](k8s/workload-management/Pod/pod.yaml) — Manifest for the `nginx` Pod.
 
 
 ### Networking
 
-- [Services](./k8s/networking/Service.md) — Service types, ports, creation, connections, and troubleshooting.
-- [Ingress](./k8s/networking/Ingress.md) — Ingress creation, editing, and Minikube setup.
+- [Services](k8s/networking/K8s-Service/Service.md) — Service types, ports, creation, connections, and troubleshooting.
+- [Ingress](k8s/networking/Ingress/Ingress.md) — Ingress creation, editing, and Minikube setup.
 
 ### Workload Management
 

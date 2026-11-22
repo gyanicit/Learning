@@ -10,7 +10,7 @@ Pods are temporary. If a Pod is deleted or replaced, its replacement is a new Po
 
 ## Reading `pod.yaml`
 
-The [`pod.yaml`](pod.yaml) file in this directory describes a Pod named `nginx` in the `dev-ns` namespace:
+The [`pod.yaml`](pod.yaml) file describes a Pod named `nginx` in the `dev-ns` namespace. Here is the complete manifest:
 
 ```yaml
 apiVersion: v1
@@ -18,18 +18,84 @@ kind: Pod
 metadata:
   name: nginx
   namespace: dev-ns
+  labels:
+    env: dev
+    type: frontend
 spec:
   containers:
     - name: nginx
       image: nginx
 ```
 
-- `apiVersion: v1` selects Kubernetes' core API, where built-in resources such as Pods and Services live.
-- `kind: Pod` says that this manifest describes a Pod. `apps/v1` is used for resources such as a Deployment, not a Pod.
-- `metadata` gives the Pod its name and namespace.
-- `spec` describes the container Kubernetes should run.
+### Resource identity and metadata
+
+| Field | Meaning in this manifest |
+| --- | --- |
+| `apiVersion: v1` | Uses the core Kubernetes API version, which contains built-in resources such as Pods and Services. |
+| `kind: Pod` | Declares the resource type. A Deployment uses `apps/v1`; this file creates a Pod directly. |
+| `metadata.name: nginx` | Names this Pod. Names must be unique within a namespace. |
+| `metadata.namespace: dev-ns` | Places this namespaced resource in `dev-ns`. That namespace must already exist. |
+| `metadata.labels` | Adds the key/value labels `env=dev` and `type=frontend`. Labels help identify and select objects; they are not environment variables and do not create a Deployment or Service by themselves. |
+
+### What is inside `spec`?
+
+`spec` is the desired Pod configuration. The scheduler selects a node, and that node's kubelet works to run the Pod according to this specification. Kubernetes reports observed results separately in `status`; you normally do not set `status` in a Pod manifest.
+
+| Path | Meaning in this manifest |
+| --- | --- |
+| `spec.containers` | A list of application containers that belong to this Pod. Kubernetes schedules the Pod as a unit; the containers share the Pod network namespace and can share declared volumes. This manifest has one container. |
+| `spec.containers[0].name: nginx` | Names the first container within the Pod. Use this name with commands such as `kubectl logs -c nginx` and `kubectl exec -c nginx`. |
+| `spec.containers[0].image: nginx` | Tells the runtime which container image to run. No tag is written, so Kubernetes treats it as `nginx:latest`; the default `imagePullPolicy` for this image is `Always`. For repeatable deployments, choose a specific image version or digest and set an appropriate pull policy. |
+
+This is a deliberately small spec. Fields that are not written are not necessarily absent from the object after creation: Kubernetes applies defaults. For example, the Pod's default `restartPolicy` is `Always`. The kubelet restarts a failed container in this same Pod; a standalone Pod does not get a replacement Pod just because a container restarts.
+
+### Common fields you can add under `spec`
+
+The following fields are not in the current `pod.yaml`; they are common ways to configure a Pod and its containers:
+
+| Scope | Field | Responsibility |
+| --- | --- | --- |
+| Pod | `restartPolicy` | Controls how containers are restarted in this Pod: `Always`, `OnFailure`, or `Never`. The default is `Always`. It does not create a replacement Pod. |
+| Pod | `initContainers` | Defines setup containers that run before regular `containers`. They commonly prepare files or wait for prerequisites. |
+| Pod | `volumes` | Declares storage or other data sources available to containers in the Pod. A container uses a volume by adding a matching `volumeMounts` entry. |
+| Pod | `nodeSelector`, `affinity`, `tolerations` | Add scheduling constraints or permissions that affect which nodes are eligible. The scheduler still chooses the node. |
+| Pod | `serviceAccountName` | Selects the ServiceAccount identity used by the Pod when it needs to access the Kubernetes API. If omitted, Kubernetes uses the namespace's default ServiceAccount. |
+| Pod or container | `securityContext` | Sets security-related execution options, such as the user/group or Linux capabilities, at Pod or container scope. |
+| Container | `command`, `args` | Override the image's startup command (`command`) and default arguments (`args`). |
+| Container | `env`, `envFrom` | Pass configuration into the container as environment variables; values can also come from ConfigMaps or Secrets. |
+| Container | `ports` | Documents named container ports for other configuration, such as probes and Services. Declaring `containerPort` alone does not create a Service or publish a host port. |
+| Container | `resources.requests`, `resources.limits` | Requests help the scheduler choose a node; limits constrain resource use for the running container. |
+| Container | `startupProbe`, `readinessProbe`, `livenessProbe` | Check startup, ability to receive traffic, and whether the container should be restarted, respectively. |
+| Container | `volumeMounts` | Mounts a volume declared under the Pod-level `spec.volumes` into the container's filesystem. |
+
+For example, adding `resources` and a `readinessProbe` would look like this inside the existing container entry:
+
+```yaml
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - name: http
+          containerPort: 80
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "128Mi"
+        limits:
+          cpu: "500m"
+          memory: "256Mi"
+      readinessProbe:
+        httpGet:
+          path: /
+          port: http
+```
+
+This is an illustrative fragment, not the complete current manifest. The resource requests are used when placing the Pod; the readiness probe keeps the Pod out of ready Service endpoints until the HTTP check succeeds. A declared port helps name/reference port 80, while a separate Service is still needed for a stable Service address.
 
 A Pod is built into Kubernetes, so it does not require a CustomResourceDefinition (CRD). A CRD is used to add a new resource type to the Kubernetes API.
+
+For the complete field reference, see the official [Pod API reference](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/), [container image guide](https://kubernetes.io/docs/concepts/containers/images/), [resource requests and limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/), and [probe guide](https://kubernetes.io/docs/concepts/workloads/pods/probes/).
 
 ## Lifecycle of a Pod
 
