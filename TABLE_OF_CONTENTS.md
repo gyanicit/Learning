@@ -26,6 +26,10 @@ This file links to the documents and configuration files in this repository, gro
 
 ## Kubernetes
 
+### Architecture
+
+- [Kubernetes Cluster Architecture](./k8s/README.md) — Control-plane and data-plane components, responsibilities, and common topology combinations.
+
 ### Cluster Management
 
 - [Minikube Cluster Guide](./k8s/Cluster-Management/minikube-k8s-cluster/README.md) — Install Minikube and create or manage a multi-node local cluster.
