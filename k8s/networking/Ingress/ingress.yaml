@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    # Optional: Rewrite target path if needed (common for NGINX Ingress Controller)
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx   # Must match your installed Ingress Controller (e.g., nginx, alb, traefik)
+  rules:
+    - host: ://my-service.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-clusterip-service
+                port:
+                  number: 80

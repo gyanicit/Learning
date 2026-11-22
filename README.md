@@ -35,11 +35,6 @@ This file links to the documents and configuration files in this repository, gro
 - [Kind Cluster Guide](./k8s/Cluster-Management/kind-k8s-cluster/README.md) — Install Kind and create or manage a multi-node local cluster.
   - [Kind Cluster Configuration](./k8s/Cluster-Management/kind-k8s-cluster/cluster.yaml) — One control-plane node and two worker nodes.
 
-### Networking
-
-- [Services](k8s/networking/k8s-Service/README.md) — Service types, ports, creation, connections, and troubleshooting.
-- [Ingress](./k8s/networking/Ingress/Ingress.md) — Ingress creation, editing, and Minikube setup.
-
 ### Workload Management
 
 - [Workload Management Overview](./k8s/workload-management/README.md) — How Pods, ReplicationControllers, ReplicaSets, and Deployments relate.
@@ -58,6 +53,11 @@ This file links to the documents and configuration files in this repository, gro
 #### Deployment
 - [Deployment Guide](./k8s/workload-management/Deployment/README.md) — Deployment behavior, rollout management, scaling, and rollback.
 - [Deployment Manifest](./k8s/workload-management/Deployment/deployment.yaml) — Example Deployment manifest.
+
+### Networking
+
+- [Services](k8s/networking/k8s-Service/README.md) — Service types, ports, creation, connections, and troubleshooting.
+- [Ingress](k8s/networking/Ingress/README.md) — Ingress creation, editing, and Minikube setup.
 
 ### kubectl Cheatsheet
 - [Cheatsheet](https://kubernetes.io/docs/reference/kubectl/quick-reference/)
