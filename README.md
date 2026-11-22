@@ -8,7 +8,7 @@ This file links to the documents and configuration files in this repository, gro
 - [Docker Commands](./docker/docker.md) — Common commands for images, containers, and Docker Compose.
 - [Docker Build Guide](./docker/DOCKER_BUILD_GUIDE.md) — Build and run a Spring Boot demo with Docker or Compose.
 
-### Apps Dockerization
+### Application Dockerization
 
 #### Databases
 - MySQL
@@ -44,7 +44,7 @@ This file links to the documents and configuration files in this repository, gro
 
 - [Workload Management Overview](./k8s/workload-management/README.md) — How Pods, ReplicationControllers, ReplicaSets, and Deployments relate.
 #### Pod
-- [Pod Guide](./k8s/workload-management/Pod/Pod.md) — Pod structure, lifecycle, components, creation, and common `kubectl` commands.
+- [Pod Guide](k8s/workload-management/Pod/README.md) — Pod structure, lifecycle, components, creation, and common `kubectl` commands.
 - [Pod Manifest](./k8s/workload-management/Pod/pod.yaml) — Manifest for the `nginx` Pod.
 
 #### Replication Controller
