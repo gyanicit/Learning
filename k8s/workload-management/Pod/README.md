@@ -1,5 +1,39 @@
 # Kubernetes Pod
 
+## Table of Contents
+
+- [1. Create & Apply](#1-create--apply)
+  - [What is a Pod?](#what-is-a-pod)
+  - [Reading `pod.yaml`](#reading-podyaml)
+  - [Resource identity and metadata](#resource-identity-and-metadata)
+  - [What is inside `spec`?](#what-is-inside-spec)
+  - [Common fields you can add under `spec`](#common-fields-you-can-add-under-spec)
+  - [Namespace behavior](#namespace-behavior)
+  - [Imperative method](#imperative-method)
+  - [Create once from a manifest](#create-once-from-a-manifest)
+  - [Declarative method](#declarative-method)
+  - [Generate a manifest with `kubectl run`](#generate-a-manifest-with-kubectl-run)
+- [2. Inspect & Monitor](#2-inspect--monitor)
+  - [Pod lifecycle and component flow](#pod-lifecycle-and-component-flow)
+  - [Numbered lifecycle steps](#numbered-lifecycle-steps)
+  - [Components and their responsibilities](#components-and-their-responsibilities)
+  - [Pod phases at a glance](#pod-phases-at-a-glance)
+  - [Watch and inspect the Pod](#watch-and-inspect-the-pod)
+  - [Show labels and node details](#show-labels-and-node-details)
+  - [Follow container logs](#follow-container-logs)
+  - [Open a shell in a container](#open-a-shell-in-a-container)
+  - [Export a running Pod for inspection](#export-a-running-pod-for-inspection)
+- [3. Scale Replicas](#3-scale-replicas)
+- [4. Edit & Update](#4-edit--update)
+  - [Edit a live Pod](#edit-a-live-pod)
+  - [Replace a Pod from a manifest](#replace-a-pod-from-a-manifest)
+- [5. Expose via a Service](#5-expose-via-a-service)
+- [6. Delete & Orphan](#6-delete--orphan)
+  - [Delete the Pod](#delete-the-pod)
+  - [Deletion and graceful shutdown](#deletion-and-graceful-shutdown)
+  - [What orphaning means](#what-orphaning-means)
+- [References](#references)
+
 > **About the outputs below:** These are representative examples. Names, ages, IP addresses, event counts, and status vary by cluster and timing; output excerpts omit unrelated fields. The current `pod.yaml` does not set `metadata.namespace`, so all commands below use the namespace configured for the current kubectl context.
 
 ## 1. Create & Apply

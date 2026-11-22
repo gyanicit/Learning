@@ -1,5 +1,13 @@
 # Kubernetes Workload Management
 
+## Table of Contents
+
+- [How they relate](#how-they-relate)
+- [Side-by-side comparison](#side-by-side-comparison)
+- [What each layer does](#what-each-layer-does)
+- [Which one should I use?](#which-one-should-i-use)
+- [Official references](#official-references)
+
 A **Pod** is the unit that actually runs containers. A **ReplicationController**, **ReplicaSet**, or **Deployment** is a controller that works to keep the requested Pods available and, depending on the controller, manage updates.
 
 ## How they relate

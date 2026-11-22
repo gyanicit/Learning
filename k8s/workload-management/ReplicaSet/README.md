@@ -1,5 +1,26 @@
 # Kubernetes ReplicaSet
 
+## Table of Contents
+
+- [1. Create & Apply](#1-create--apply)
+  - [How a ReplicaSet works](#how-a-replicaset-works)
+  - [Important fields in this manifest](#important-fields-in-this-manifest)
+  - [Imperative creation](#imperative-creation)
+  - [Create once from the manifest](#create-once-from-the-manifest)
+  - [Apply the manifest declaratively](#apply-the-manifest-declaratively)
+- [2. Inspect & Monitor](#2-inspect--monitor)
+  - [Explain the API fields](#explain-the-api-fields)
+  - [Common inspection commands](#common-inspection-commands)
+  - [Check which ReplicaSet owns a Pod](#check-which-replicaset-owns-a-pod)
+- [3. Scale Replicas](#3-scale-replicas)
+- [4. Edit & Update](#4-edit--update)
+- [5. Expose via a Service](#5-expose-via-a-service)
+- [6. Delete & Orphan](#6-delete--orphan)
+  - [Delete the ReplicaSet and its Pods](#delete-the-replicaset-and-its-pods)
+  - [Delete the ReplicaSet but keep its Pods](#delete-the-replicaset-but-keep-its-pods)
+  - [Can an already-running Pod join a new ReplicaSet?](#can-an-already-running-pod-join-a-new-replicaset)
+- [References](#references)
+
 > **Use a Deployment for most applications.** A Deployment manages ReplicaSets and provides controlled rollouts and rollbacks. A ReplicaSet keeps a specified number of matching Pods running, but does not roll out changes to existing Pods by itself. ReplicaSet is the modern successor to the legacy ReplicationController and supports set-based selectors. This guide is useful for understanding ReplicaSets or working with one directly.
 
 The example manifest is [replica-set.yaml](replica-set.yaml). It defines `nginx-rs` with three desired nginx Pod replicas and selects Pods labeled `app: my-app`.

@@ -1,5 +1,26 @@
 # Kubernetes ReplicationController
 
+## Table of Contents
+
+- [1. Create & Apply](#1-create--apply)
+  - [How a ReplicationController works](#how-a-replicationcontroller-works)
+  - [Important fields in this manifest](#important-fields-in-this-manifest)
+  - [Imperative creation](#imperative-creation)
+  - [Apply the manifest](#apply-the-manifest)
+- [2. Inspect & Monitor](#2-inspect--monitor)
+  - [Explain the API fields](#explain-the-api-fields)
+  - [Common inspection commands](#common-inspection-commands)
+  - [Read the replica status](#read-the-replica-status)
+  - [Check which ReplicationController owns a Pod](#check-which-replicationcontroller-owns-a-pod)
+- [3. Scale Replicas](#3-scale-replicas)
+- [4. Edit & Update](#4-edit--update)
+- [5. Expose via a Service](#5-expose-via-a-service)
+- [6. Delete & Orphan](#6-delete--orphan)
+  - [Delete the ReplicationController and its Pods](#delete-the-replicationcontroller-and-its-pods)
+  - [Delete the controller but keep its Pods](#delete-the-controller-but-keep-its-pods)
+  - [Can an already-running Pod join a new ReplicationController?](#can-an-already-running-pod-join-a-new-replicationcontroller)
+- [References](#references)
+
 > **Legacy resource:** ReplicationControllers still work, but Kubernetes recommends Deployments for most replicated workloads. A Deployment manages ReplicaSets, which then manage Pods. Use this guide to understand or maintain ReplicationControllers already in use.
 
 The example manifest is [replication-controller.yaml](replication-controller.yaml). It defines `nginx-rc` with three desired nginx Pod replicas.

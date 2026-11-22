@@ -1,5 +1,20 @@
 # PostgreSQL, pgvector, and pgAdmin 4 Setup
 
+## Table of Contents
+
+- [1. Understand the parts](#1-understand-the-parts)
+- [2. Prerequisites](#2-prerequisites)
+- [3. Start PostgreSQL with pgvector](#3-start-postgresql-with-pgvector)
+  - [Confirm the container started](#confirm-the-container-started)
+- [4. Enable and verify the vector extension](#4-enable-and-verify-the-vector-extension)
+- [5. Install pgAdmin 4 on Windows](#5-install-pgadmin-4-on-windows)
+- [6. Register the Docker database in pgAdmin](#6-register-the-docker-database-in-pgadmin)
+  - [Try a SQL query in pgAdmin](#try-a-sql-query-in-pgadmin)
+- [7. Connect the application](#7-connect-the-application)
+- [8. Start, stop, and inspect the database](#8-start-stop-and-inspect-the-database)
+- [9. Common problems](#9-common-problems)
+- [References](#references)
+
 This guide explains how to start a local PostgreSQL database with the `pgvector` extension, manage it through pgAdmin 4 on Windows, and configure an application to connect to it. It uses the database name, user, and host port from the Docker command discussed with the team.
 
 ## 1. Understand the parts

@@ -1,5 +1,29 @@
 # Docker Build Guide for a Spring Boot Demo App
 
+## Table of Contents
+
+- [1. Project layout](#1-project-layout)
+  - [Optional: minimal sample application files](#optional-minimal-sample-application-files)
+- [2. Project values used by this Dockerfile](#2-project-values-used-by-this-dockerfile)
+- [3. Complete Dockerfile](#3-complete-dockerfile)
+- [4. What the Dockerfile does](#4-what-the-dockerfile-does)
+  - [Build stage](#build-stage)
+  - [Runtime stage](#runtime-stage)
+- [5. Build the final image](#5-build-the-final-image)
+  - [Show the build steps](#show-the-build-steps)
+- [6. Optionally build only the Maven stage](#6-optionally-build-only-the-maven-stage)
+- [7. List and inspect images](#7-list-and-inspect-images)
+  - [Inspect the build-stage files](#inspect-the-build-stage-files)
+- [8. Approach A: build and run with Docker commands only](#8-approach-a-build-and-run-with-docker-commands-only)
+  - [Build the final image](#build-the-final-image)
+  - [Start the image in the foreground](#start-the-image-in-the-foreground)
+  - [Or start it in the background](#or-start-it-in-the-background)
+- [9. Approach B: build and run with Docker Compose](#9-approach-b-build-and-run-with-docker-compose)
+  - [Compose file](#compose-file)
+  - [Build and start with Compose](#build-and-start-with-compose)
+- [10. How the two workflows differ](#10-how-the-two-workflows-differ)
+- [Further reading](#further-reading)
+
 This guide shows the complete Dockerfile and walks through the image build cycle: preparing the project, building the final image, optionally building the Maven stage for inspection, running the app, and cleaning up.
 
 ## 1. Project layout

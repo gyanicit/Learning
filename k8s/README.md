@@ -1,5 +1,18 @@
 # Kubernetes Cluster Architecture
 
+## Table of Contents
+
+- [Architecture diagram](#architecture-diagram)
+  - [High-level architecture](#high-level-architecture)
+- [Component responsibilities](#component-responsibilities)
+  - [What happens when a Pod is created](#what-happens-when-a-pod-is-created)
+- [Common control-plane and data-plane combinations](#common-control-plane-and-data-plane-combinations)
+  - [Data-plane choices](#data-plane-choices)
+  - [Control plane and scheduling](#control-plane-and-scheduling)
+  - [Pod startup on a worker node](#pod-startup-on-a-worker-node)
+  - [Service traffic and cluster networking](#service-traffic-and-cluster-networking)
+- [References](#references)
+
 This guide shows how the Kubernetes **control plane** coordinates the **data plane**, what each component does, and common ways to combine the components when building a cluster.
 
 The control plane stores and reconciles the desired cluster state. The data plane is made up of the machines and node services that run Pods and carry application traffic. These are architectural roles: in a small cluster, a machine can serve both roles.

@@ -1,5 +1,12 @@
 # Docker Commands
 
+## Table of Contents
+
+- [Check Docker](#check-docker)
+- [Work with Images](#work-with-images)
+- [Run and Manage Containers](#run-and-manage-containers)
+- [Docker Compose](#docker-compose)
+
 ## Check Docker
 
 ```bash

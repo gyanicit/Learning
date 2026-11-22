@@ -1,5 +1,19 @@
 # Minikube installation and cluster commands
 
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Install Minikube](#install-minikube)
+  - [Windows](#windows)
+  - [macOS](#macos)
+  - [Linux](#linux)
+- [Create the three-node cluster](#create-the-three-node-cluster)
+- [Add workers to an existing single-node cluster](#add-workers-to-an-existing-single-node-cluster)
+- [Check cluster and node status](#check-cluster-and-node-status)
+- [Remove worker nodes](#remove-worker-nodes)
+- [Stop, restart, or delete the cluster](#stop-restart-or-delete-the-cluster)
+- [Official references](#official-references)
+
 Install Minikube for your operating system, set up a supported container or virtual-machine driver, then create a cluster with one control-plane node and two workers. This guide covers Linux, macOS, and Windows. It contains Minikube setup and node-management commands only.
 
 ## Requirements

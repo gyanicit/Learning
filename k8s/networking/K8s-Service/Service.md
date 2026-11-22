@@ -1,3 +1,15 @@
+## Table of Contents
+
+- [How Service ports work](#how-service-ports-work)
+- [Service types](#service-types)
+  - [Headless Services](#headless-services)
+- [Create a Deployment and Service with YAML](#create-a-deployment-and-service-with-yaml)
+- [Create a Service imperatively](#create-a-service-imperatively)
+- [Connect to a Service](#connect-to-a-service)
+- [Manage Services](#manage-services)
+- [Troubleshoot a Service](#troubleshoot-a-service)
+- [Further reading](#further-reading)
+
 
 # Kubernetes Services: Create and Manage
 

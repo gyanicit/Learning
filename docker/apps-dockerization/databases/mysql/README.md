@@ -1,5 +1,13 @@
 # MySQL with Docker Compose
 
+## Table of Contents
+
+- [Configuration](#configuration)
+- [Start MySQL](#start-mysql)
+- [Connect to the database](#connect-to-the-database)
+- [Stop and remove the container](#stop-and-remove-the-container)
+- [References](#references)
+
 This folder contains a Compose file for starting a MySQL database for local learning and development.
 
 ## Configuration

@@ -1,5 +1,17 @@
 # Docker Installation: Windows, WSL, and Linux
 
+## Table of Contents
+
+- [Windows with WSL 2](#windows-with-wsl-2)
+  - [1. Install or update WSL](#1-install-or-update-wsl)
+  - [2. Install Docker Desktop](#2-install-docker-desktop)
+  - [3. Verify from WSL](#3-verify-from-wsl)
+- [Linux: Install Docker Engine on Ubuntu](#linux-install-docker-engine-on-ubuntu)
+  - [1. Set up Docker's APT repository](#1-set-up-dockers-apt-repository)
+  - [2. Install Docker Engine and Compose](#2-install-docker-engine-and-compose)
+  - [3. Optional: Run Docker without `sudo`](#3-optional-run-docker-without-sudo)
+- [Official installation guides](#official-installation-guides)
+
 ## Windows with WSL 2
 
 The recommended Windows setup for Linux containers is Docker Desktop using its WSL 2 backend.

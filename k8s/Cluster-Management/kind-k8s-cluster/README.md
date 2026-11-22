@@ -1,5 +1,18 @@
 # Kind cluster commands
 
+## Table of Contents
+
+- [Prerequisite](#prerequisite)
+- [Install Kind](#install-kind)
+  - [Linux](#linux)
+  - [macOS](#macos)
+  - [Windows](#windows)
+- [Create this repository's cluster](#create-this-repositorys-cluster)
+- [Load local images into the cluster](#load-local-images-into-the-cluster)
+- [Export Kind cluster logs](#export-kind-cluster-logs)
+- [Delete the cluster](#delete-the-cluster)
+- [Official references](#official-references)
+
 Kind (Kubernetes IN Docker) creates local Kubernetes clusters with containerized nodes. This guide covers Kind installation and Kind cluster operations only. The configuration in `kind-k8s-cluster/cluster.yaml` creates one control-plane node and two worker nodes.
 
 ## Prerequisite

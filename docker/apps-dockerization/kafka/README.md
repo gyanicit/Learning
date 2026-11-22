@@ -1,3 +1,14 @@
+## Table of Contents
+
+- [Kafka with Zookeeper Setup](#kafka-with-zookeeper-setup)
+  - [Step-1: Write compose file](#step-1-write-compose-file)
+  - [Step-2:  Run docker compose](#step-2-run-docker-compose)
+    - [What happens behind the scenes when you run it?](#what-happens-behind-the-scenes-when-you-run-it)
+- [Kafka UI Setup](#kafka-ui-setup)
+  - [Kafka-UI URL](#kafka-ui-url)
+    - [If you are using WSL](#if-you-are-using-wsl)
+    - [Without WSL](#without-wsl)
+
 ## Kafka with Zookeeper Setup
 ### Step-1: Write compose file
 ```dockerfile

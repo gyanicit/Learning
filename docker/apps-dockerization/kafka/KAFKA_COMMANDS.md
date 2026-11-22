@@ -1,5 +1,27 @@
 # Kafka Commands
 
+## Table of Contents
+
+- [Command Line binaries path](#command-line-binaries-path)
+  - [Windows](#windows)
+  - [Linux or macOS](#linux-or-macos)
+  - [Docker Compose container](#docker-compose-container)
+- [Kafka Commands](#kafka-commands)
+  - [Which broker address should I use?](#which-broker-address-should-i-use)
+  - [Beginner workflow](#beginner-workflow)
+    - [1. Check that the broker is reachable](#1-check-that-the-broker-is-reachable)
+    - [2. List existing topics](#2-list-existing-topics)
+    - [3. Create a topic for practice](#3-create-a-topic-for-practice)
+    - [4. Inspect the topic](#4-inspect-the-topic)
+    - [5. Start a consumer in the first terminal](#5-start-a-consumer-in-the-first-terminal)
+    - [6. Start a producer in a second terminal](#6-start-a-producer-in-a-second-terminal)
+    - [7. Inspect the consumer group and its lag](#7-inspect-the-consumer-group-and-its-lag)
+    - [8. Review commands before using them](#8-review-commands-before-using-them)
+  - [Common topic management](#common-topic-management)
+  - [Common consumer group operations](#common-consumer-group-operations)
+  - [Kafka binary reference](#kafka-binary-reference)
+  - [References](#references)
+
 This document explains how to reach the Kafka command-line binaries on Windows, Linux/macOS, and inside the Kafka Docker container. It covers locating the binaries and execution of Kafka command.
 
 ## Command Line binaries path

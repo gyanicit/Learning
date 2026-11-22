@@ -1,3 +1,18 @@
+## Table of Contents
+
+- [Ingress Management](#ingress-management)
+  - [Get All Ingress](#get-all-ingress)
+  - [Get Ingress by name](#get-ingress-by-name)
+  - [Get Ingress in yaml format](#get-ingress-in-yaml-format)
+  - [Create Ingress](#create-ingress)
+  - [Edit Ingress](#edit-ingress)
+  - [Enable Minikube addon](#enable-minikube-addon)
+  - [Check Minikube addons](#check-minikube-addons)
+    - [List all addons](#list-all-addons)
+    - [List particular addons](#list-particular-addons)
+  - [Make hosts entry for local dns](#make-hosts-entry-for-local-dns)
+  - [Edit Ingress in yaml format](#edit-ingress-in-yaml-format)
+
 ## Ingress Management
 ### Get All Ingress
 ```
