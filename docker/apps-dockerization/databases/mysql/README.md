@@ -71,4 +71,4 @@ This permanently removes the database data. The MySQL image's `MYSQL_DATABASE` a
 
 - [MySQL official image documentation](https://hub.docker.com/_/mysql)
 - [Docker Compose `down` reference](https://docs.docker.com/reference/cli/docker/compose/down/)
-- [Repository table of contents](../../../../TABLE_OF_CONTENTS.md)
+- [Repository table of contents](../../../../README.md)

@@ -264,4 +264,4 @@ The API server's dashed arrows represent ongoing Service and EndpointSlice updat
 - [Cluster architecture](https://kubernetes.io/docs/concepts/architecture/)
 - [Nodes](https://kubernetes.io/docs/concepts/architecture/nodes/)
 - [Creating highly available clusters with kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/)
-- [Repository table of contents](../TABLE_OF_CONTENTS.md)
+- [Repository table of contents](../README.md)
