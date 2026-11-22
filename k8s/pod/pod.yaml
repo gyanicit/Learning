@@ -3,6 +3,9 @@ kind: Pod
 metadata:
   name: nginx
   namespace: dev-ns
+  labels:
+    env: dev
+    type: frontend
 spec:
   containers:
     - name: nginx
