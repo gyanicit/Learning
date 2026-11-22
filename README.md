@@ -58,3 +58,6 @@ This file links to the documents and configuration files in this repository, gro
 #### Deployment
 - [Deployment Guide](./k8s/workload-management/Deployment/README.md) — Deployment behavior, rollout management, scaling, and rollback.
 - [Deployment Manifest](./k8s/workload-management/Deployment/deployment.yaml) — Example Deployment manifest.
+
+### kubectl Cheatsheet
+- [Cheatsheet](https://kubernetes.io/docs/reference/kubectl/quick-reference/)
