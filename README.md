@@ -55,8 +55,14 @@ This file links to the documents and configuration files in this repository, gro
 - [Deployment Manifest](./k8s/workload-management/Deployment/deployment.yaml) — Example Deployment manifest.
 
 ### Networking
-
-- [Services](k8s/networking/k8s-Service/README.md) — Service types, ports, creation, connections, and troubleshooting.
+### K8s Service
+- [Service](k8s/networking/k8s-Service/README.md) — Service types, ports, creation, connections, and troubleshooting.
+- [NodePort Service Manifest](k8s/networking/k8s-Service/nodeport-service.yaml) — Example NodePort Service manifest.
+  - [Access NodePort Service](k8s/networking/k8s-Service/access-nodeport.md) — How to access NodePort Service Type.
+- [LoadBalancer Service Manifest](k8s/networking/k8s-Service/load-balancer-service.yaml) — Example LoadBalancer Service manifest.
+- [ClusterIP Service Manifest](k8s/networking/k8s-Service/cluster-ip-service.yaml) — Example ClusterIP Service manifest.
+- [ExternalName Service Manifest](k8s/networking/k8s-Service/external-name-service.yaml) — Example ExternalName Service manifest.
+### Ingress
 - [Ingress](k8s/networking/Ingress/README.md) — Ingress creation, editing, and Minikube setup.
 
 ### kubectl Cheatsheet
