@@ -17,9 +17,13 @@
   - [Inspect the Ingress and class](#inspect-the-ingress-and-class)
   - [Check the backend Service and endpoints](#check-the-backend-service-and-endpoints)
 - [3. Configure Host and Path Routing](#3-configure-host-and-path-routing)
+  - [Browser and REST-client hostname access](#browser-and-rest-client-hostname-access)
   - [Test from Minikube on WSL](#test-from-minikube-on-wsl)
+    - [Open Minikube Ingress from a browser or REST client](#open-minikube-ingress-from-a-browser-or-rest-client)
   - [Test from Kind using cloud-provider-kind](#test-from-kind-using-cloud-provider-kind)
+    - [Open native Kind Ingress from a browser or REST client](#open-native-kind-ingress-from-a-browser-or-rest-client)
   - [Test from Kind using Ingress NGINX](#test-from-kind-using-ingress-nginx)
+    - [Open Kind Ingress NGINX from a browser or REST client](#open-kind-ingress-nginx-from-a-browser-or-rest-client)
 - [4. Edit & Update](#4-edit--update)
 - [5. Backend Service & TLS](#5-backend-service--tls)
 - [6. Delete & Troubleshoot](#6-delete--troubleshoot)
@@ -110,13 +114,6 @@ In WSL, install the provider binary (Go is required):
 
 ```shell
 go install sigs.k8s.io/cloud-provider-kind@latest
-```
-
-Start the provider in a separate WSL terminal and leave it running while using Ingress. On WSL2 the provider needs elevated permissions. Make the active kubeconfig visible to the process; the following uses the default kubeconfig location when `KUBECONFIG` is not set:
-
-```shell
-export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
-sudo env KUBECONFIG="$KUBECONFIG" "$(go env GOPATH)/bin/cloud-provider-kind"
 ```
 
 Start the provider in a separate WSL terminal and leave it running while using Ingress. On WSL2 the provider needs elevated permissions. Make the active kubeconfig visible to the process; the following uses the default kubeconfig location when `KUBECONFIG` is not set:
@@ -321,9 +318,22 @@ The Ingress backend points to Service port `80`; the Service maps that port to i
 
 The `host` rule is evaluated from the HTTP `Host` header. For local learning, `curl -H` can send that header without setting up DNS. The URL path must also match the configured path. A `404` from an Ingress implementation often means the host/path did not match an Ingress rule; it is different from an application-level `404` returned by the backend.
 
+### Browser and REST-client hostname access
+
+A browser resolves the hostname in the URL before connecting, then sends that hostname as the HTTP `Host` header. If the Ingress rule has `host: my-service.local`, the client machine must resolve `my-service.local` to a reachable Ingress address. A REST client can use the same URL after that name mapping is set up. Alternatively, a REST client that allows a custom `Host` header can connect to a reachable IP or `localhost` port and send `Host: my-service.local` without a hosts-file entry.
+
+Add the hosts entry on the machine running the browser or REST client:
+
+| Client machine | Hosts file |
+| --- | --- |
+| Linux or a browser/client inside WSL | `/etc/hosts` |
+| Windows browser or REST client | `C:\Windows\System32\drivers\etc\hosts` (edit as Administrator) |
+
+The address to put in that entry depends on the cluster and access method, as shown below. A hosts-file entry only resolves the name; the machine still needs a network path to the IP and port.
+
 ### Test from Minikube on WSL
 
-Get Minikube's node IP and send a request with the configured host:
+Get Minikube's node IP and send a request with the configured host from WSL. This needs no hosts-file entry because `curl` connects to the IP and supplies the host header:
 
 ```shell
 MINIKUBE_IP="$(minikube ip)"
@@ -332,17 +342,27 @@ curl -i -H "Host: my-service.local" "http://${MINIKUBE_IP}/"
 
 If the backend responds, `curl -i` shows an HTTP status line (for example `HTTP/1.1 200 OK`) followed by the response headers and body. The response body comes from the application behind the Service.
 
-To use a browser or omit `-H`, map the host to the Minikube IP in WSL:
+### Open Minikube Ingress from a browser or REST client
+
+If the browser or REST client can reach the Minikube IP on port 80, add this mapping to the client machine's hosts file:
 
 ```shell
 echo "$(minikube ip) my-service.local" | sudo tee -a /etc/hosts
 ```
 
-If the browser runs in Windows rather than WSL, the hostname mapping must also be present in the Windows hosts file, and Windows must be able to reach the Minikube IP. The WSL `/etc/hosts` file changes name resolution only inside WSL.
+For a Windows browser/client, use the IP from `minikube ip` in the Windows hosts file instead; editing WSL's `/etc/hosts` only affects programs inside WSL. Then open `http://my-service.local/` or use that URL in the REST client.
+
+If a Windows client cannot reach the Minikube IP and you enabled the Traefik addon, forward the Traefik Service to a local WSL port:
+
+```shell
+kubectl port-forward --namespace kube-system service/traefik 8080:80
+```
+
+Add `127.0.0.1 my-service.local` to the Windows hosts file and open `http://my-service.local:8080/`. WSL2 normally forwards ports bound in WSL to Windows `localhost`; see [Microsoft's WSL networking guide](https://learn.microsoft.com/windows/wsl/networking). Keep the `kubectl port-forward` command running while using the browser or client.
 
 ### Test from Kind using cloud-provider-kind
 
-After `cloud-provider-kind` is running, inspect the address assigned to the Ingress and send the matching host header:
+After `cloud-provider-kind` is running, inspect the address assigned to the Ingress and send the matching host header from WSL. This test needs no hosts-file entry:
 
 ```shell
 kubectl get ingress my-ingress -o wide
@@ -350,7 +370,30 @@ INGRESS_IP="$(kubectl get ingress my-ingress -o jsonpath='{.status.loadBalancer.
 curl -i -H "Host: my-service.local" "http://${INGRESS_IP}/"
 ```
 
-The Kind guide's example shows an IP in the Ingress `ADDRESS` column and verifies the route with `curl`. On WSL2, the external IP can be accessed from WSL when the provider is running with the required permissions. Windows-host browser access may use Docker's port mapping; see the provider's WSL2 notes.
+The Kind guide's example shows an IP in the Ingress `ADDRESS` column and verifies the route with `curl`. On WSL2, the external IP can be accessed from WSL when the provider is running with the required permissions.
+
+### Open native Kind Ingress from a browser or REST client
+
+For a browser/client inside WSL, map the Ingress address to the rule's hostname in WSL `/etc/hosts`, then open `http://my-service.local/`:
+
+```shell
+INGRESS_IP="$(kubectl get ingress my-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+echo "${INGRESS_IP} my-service.local" | sudo tee -a /etc/hosts
+```
+
+For a Windows browser/client using Docker Desktop, `cloud-provider-kind` exposes the Ingress through a Docker-published localhost port. Find the published port for the `kindccm` container:
+
+```shell
+docker ps --filter name=kindccm --format 'table {{.Names}}\t{{.Ports}}'
+```
+
+In the `PORTS` column, find the host port mapped to container port `80` (for example, `0.0.0.0:42381->80/tcp`). Add `127.0.0.1 my-service.local` to the Windows hosts file, then open `http://my-service.local:42381/`, replacing `42381` with the displayed host port. Use the same URL in a REST client. On Windows, the provider relies on Docker's port mapping rather than direct access to the Kind node IP; see its [WSL2 and Windows notes](https://github.com/kubernetes-sigs/cloud-provider-kind#mac-windows-and-wsl2-support).
+
+If no published host port appears, stop the provider with `Ctrl+C` and restart it with its port-mapping option:
+
+```shell
+sudo env KUBECONFIG="$KUBECONFIG" "$(go env GOPATH)/bin/cloud-provider-kind" --enable-lb-port-mapping
+```
 
 ### Test from Kind using Ingress NGINX
 
@@ -367,6 +410,12 @@ curl -i -H "Host: my-service.local" http://localhost/
 ```
 
 With custom host port mappings (for example, host port 8080 to node container port 80), use `http://localhost:8080/`. A hosts-file entry such as `127.0.0.1 my-service.local` lets a local browser resolve the name; a `Host` header is enough for a WSL `curl` test.
+
+### Open Kind Ingress NGINX from a browser or REST client
+
+With the default mappings in the cluster configuration above, add `127.0.0.1 my-service.local` to the hosts file on the browser/client machine. Open `http://my-service.local/` from a browser or use that URL in a REST client. If you mapped a different host port, include it in the URL, such as `http://my-service.local:8080/`.
+
+For a REST client that supports custom headers, you can instead request `http://localhost/` (or `http://localhost:8080/` for a custom port) and add `Host: my-service.local`. A browser needs the hosts-file mapping because it does not provide a normal way to override the HTTP `Host` header.
 
 ## 4. Edit & Update
 
@@ -455,5 +504,6 @@ This removes the host/path rule. It does not delete the backend Service, Deploym
 - [Kind Ingress guide](https://kind.sigs.k8s.io/docs/user/ingress/)
 - [Kind port mappings](https://kind.sigs.k8s.io/docs/user/configuration/#extra-port-mappings)
 - [cloud-provider-kind setup and WSL2 notes](https://github.com/kubernetes-sigs/cloud-provider-kind)
+- [Microsoft WSL networking](https://learn.microsoft.com/windows/wsl/networking)
 - [Ingress NGINX Kind manifest (archived)](https://github.com/kubernetes/ingress-nginx/blob/controller-v1.15.1/deploy/static/provider/kind/deploy.yaml)
 - [Ingress NGINX retirement notice](https://github.com/kubernetes/ingress-nginx#ingress-nginx-retirement)
