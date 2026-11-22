@@ -37,7 +37,7 @@ This file links to the documents and configuration files in this repository, gro
 
 ### Networking
 
-- [Services](./k8s/networking/K8s-Service/Service.md) — Service types, ports, creation, connections, and troubleshooting.
+- [Services](k8s/networking/k8s-Service/README.md) — Service types, ports, creation, connections, and troubleshooting.
 - [Ingress](./k8s/networking/Ingress/Ingress.md) — Ingress creation, editing, and Minikube setup.
 
 ### Workload Management
