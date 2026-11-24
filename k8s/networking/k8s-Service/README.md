@@ -83,7 +83,7 @@ Declaring `containerPort` in a Pod specification does not expose that port. The 
 | `ClusterIP` | A stable virtual IP and DNS name inside the cluster. This is the default type. | Cluster-internal clients. |
 | `NodePort` | A Service port on node IPs. It also has a ClusterIP. | `NodeIP:NodePort`, if the client can reach the node and network rules allow the traffic. |
 | `LoadBalancer` | Requests an external load balancer from a cloud provider or installed implementation. It also has a ClusterIP and usually a NodePort. | External address when the cluster has a load-balancer implementation. |
-| `ExternalName` | Maps the Service DNS name to an external DNS name using a CNAME record. | DNS alias only; it does not select Pods or proxy traffic. |
+| [`ExternalName`](ExternalName/README.md) | Maps the Service DNS name to an external DNS name using a CNAME record. | DNS alias only; it does not select Pods or proxy traffic. |
 
 Use `ClusterIP` for most in-cluster communication. Use `NodePort` for access through node addresses, often for learning or local setups. `LoadBalancer` needs a provider or controller that can provision an external address; a local cluster may leave `EXTERNAL-IP` pending.
 
@@ -93,7 +93,7 @@ Set `clusterIP: None` on a selector-based Service to make it headless. Kubernete
 
 ## 2. Create & Apply
 
-The repository's [NodePort manifest](nodeport-service.yaml) creates `my-nodeport-service`. It selects Pods labeled `app: my-app` and forwards to port 80:
+The repository's [NodePort manifest](NodePort/nodeport-service.yaml) creates `my-nodeport-service`. It selects Pods labeled `app: my-app` and forwards to port 80:
 
 ```yaml
 apiVersion: v1
@@ -276,7 +276,7 @@ http://172.22.0.2:30080/
 
 NodePort access depends on the node IP being reachable from the client and on cluster, firewall, and host networking rules. NodePort exposes the Service, not one fixed Pod; the Service data plane forwards each connection to a ready matching endpoint.
 
-For the WSL and Kind example, node addresses, request commands, outputs, traffic flow, and troubleshooting are documented in [Access a Pod through a NodePort Service](access-nodeport.md).
+For the WSL and Kind example, node addresses, request commands, outputs, traffic flow, and troubleshooting are documented in [Access a Pod through a NodePort Service](NodePort/access-nodeport.md).
 
 ### Forward a local port for development
 
@@ -297,13 +297,7 @@ Then open `http://localhost:8080/`. The local port is 8080; the remote Service p
 
 ### Access a LoadBalancer Service
 
-A `LoadBalancer` Service can receive an external address when the cluster has a cloud-provider integration or a local load-balancer implementation. Check its status with:
-
-```shell
-kubectl get service <service-name> -o wide
-```
-
-If `EXTERNAL-IP` remains `<pending>`, the cluster may not have a controller that can provision load balancers. In that case, use a supported local access method, such as NodePort or port-forwarding.
+For the LoadBalancer manifest, provider setup in Kind, external-IP checks, and `<pending>` troubleshooting, see the [LoadBalancer Service guide](LoadBalancer/README.md).
 
 ## 5. Edit & Update
 
@@ -319,7 +313,7 @@ After saving a valid change, kubectl typically prints:
 service/my-nodeport-service edited
 ```
 
-For a repeatable update, edit `nodeport-service.yaml` and apply it from the repository root:
+For a repeatable update, edit `NodePort/nodeport-service.yaml` and apply it from the repository root:
 
 ```shell
 kubectl apply -f k8s/networking/K8s-Service/NodePort/nodeport-service.yaml
@@ -349,7 +343,7 @@ Check the following:
 5. **The access path matches the Service type.** Use Service DNS or ClusterIP inside the cluster; use `NodeIP:NodePort` for NodePort access; use an external address only when a load balancer is provisioned.
 6. **The network permits the connection.** Review NetworkPolicies, node firewalls, and local-cluster host networking when applicable.
 
-If the EndpointSlice has no endpoints, first check the selector, Pod labels, and Pod readiness. If a request works through `kubectl port-forward` but not through NodePort, check node IP reachability and firewall or local-cluster port mappings. See the [NodePort access guide](access-nodeport.md) for the WSL/Kind checks.
+If the EndpointSlice has no endpoints, first check the selector, Pod labels, and Pod readiness. If a request works through `kubectl port-forward` but not through NodePort, check node IP reachability and firewall or local-cluster port mappings. See the [NodePort access guide](NodePort/access-nodeport.md) for the WSL/Kind checks.
 
 ### Delete a Service
 
@@ -384,4 +378,4 @@ kubectl delete -f k8s/networking/K8s-Service/NodePort/nodeport-service.yaml
 - [kubectl apply](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_apply/)
 - [kubectl edit](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_edit/)
 - [kubectl delete](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_delete/)
-- [NodePort access guide](access-nodeport.md)
+- [NodePort access guide](NodePort/access-nodeport.md)

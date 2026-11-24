@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="620" viewBox="0 0 1400 620" role="img" aria-labelledby="title desc">
+  <defs>
+    <!-- Solid Arrowhead -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 1 2 L 9 5 L 1 8 z" fill="#70757a" />
+    </marker>
+
+    <!-- Drop Shadow for Boxes -->
+    <filter id="box-shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.06" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1240" height="390" fill="#ffffff" />
+
+  <!-- Cluster Boundary -->
+  <rect x="20" y="35" width="840" height="335" rx="10" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,4" />
+  <text x="38" y="56" font-size="12.5" fill="#64748b" font-weight="600">KUBERNETES CLUSTER (No kube-proxy / No ClusterIP allocated)</text>
+
+  <!-- Worker Node A Container -->
+  <rect x="330" y="75" width="320" height="245" rx="8" fill="#fafafa" stroke="#f0f0f0" stroke-width="1.5" />
+  <text x="490" y="98" text-anchor="middle" font-size="13.5" fill="#4a5568" font-weight="500">Worker Node A — client</text>
+
+  <!-- ==================== NODES / BOXES ==================== -->
+
+  <!-- CoreDNS -->
+  <g filter="url(#box-shadow)">
+    <rect x="40" y="255" width="135" height="75" rx="8" fill="#dbeafe" stroke="#bfdbfe" stroke-width="1.5" />
+    <text x="107.5" y="284" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">CoreDNS</text>
+    <text x="107.5" y="302" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e3a8a">CNAME Record</text>
+    <text x="107.5" y="317" text-anchor="middle" font-size="10.5" fill="#1e3a8a">(DNS-level alias)</text>
+  </g>
+
+  <!-- CLIENT POD -->
+  <g filter="url(#box-shadow)">
+    <rect x="360" y="185" width="260" height="115" rx="10" fill="#dbeafe" stroke="#bfdbfe" stroke-width="1.5" />
+    <text x="490" y="208" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e3a8a">CLIENT POD</text>
+    <text x="490" y="226" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">Connects to internal name:</text>
+    <text x="490" y="244" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">my-db.default.svc.cluster.local</text>
+    <text x="490" y="264" text-anchor="middle" font-size="11.5" fill="#1e3a8a">Resolves CNAME via Upstream DNS</text>
+    <text x="490" y="281" text-anchor="middle" font-size="11.5" fill="#1e3a8a">and opens direct TCP connection</text>
+  </g>
+
+  <!-- ExternalName Service Definition -->
+  <g filter="url(#box-shadow)">
+    <rect x="675" y="85" width="165" height="90" rx="10" fill="#dbeafe" stroke="#bfdbfe" stroke-width="1.5" />
+    <text x="757.5" y="108" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e3a8a">ExternalName Svc</text>
+    <text x="757.5" y="125" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e3a8a">type: ExternalName</text>
+    <text x="757.5" y="142" text-anchor="middle" font-size="11.5" fill="#1e3a8a">ClusterIP: None</text>
+    <text x="757.5" y="159" text-anchor="middle" font-size="11" fill="#1e3a8a">(No selectors / No Pods)</text>
+  </g>
+
+  <!-- Upstream / External DNS -->
+  <g filter="url(#box-shadow)">
+    <rect x="935" y="85" width="275" height="75" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5" />
+    <text x="1072.5" y="110" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e293b">Upstream / Cloud DNS</text>
+    <text x="1072.5" y="128" text-anchor="middle" font-size="11.5" font-weight="600" fill="#334155">Resolves db.prod.aws.internal</text>
+    <text x="1072.5" y="145" text-anchor="middle" font-size="11.5" fill="#64748b">→ A Record: 54.210.88.14</text>
+  </g>
+
+  <!-- External Service (Managed DB / SaaS) -->
+  <g filter="url(#box-shadow)">
+    <rect x="935" y="210" width="275" height="105" rx="10" fill="#fef3c7" stroke="#fde68a" stroke-width="1.5" />
+    <text x="1072.5" y="235" text-anchor="middle" font-size="12.5" font-weight="700" fill="#92400e">EXTERNAL SERVICE</text>
+    <text x="1072.5" y="254" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">db.prod.aws.internal</text>
+    <text x="1072.5" y="272" text-anchor="middle" font-size="11.5" font-weight="600" fill="#92400e">IP: 54.210.88.14:5432</text>
+    <text x="1072.5" y="292" text-anchor="middle" font-size="11" fill="#b45309">(Managed RDS / Legacy Server)</text>
+  </g>
+
+  <!-- ==================== CONNECTORS & NUMBERED LABELS ==================== -->
+
+  <!-- Step 1: DNS Query (CLIENT POD -> CoreDNS) -->
+  <path d="M 360 282 L 182 282" fill="none" stroke="#80868b" stroke-width="1.2" marker-end="url(#arrow)" />
+  <rect x="192" y="269" width="156" height="26" rx="13" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" />
+  <circle cx="206" cy="282" r="9" fill="#1e3a8a" />
+  <text x="206" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+  <text x="281" y="286" text-anchor="middle" font-size="11.5" fill="#334155">Queries my-db DNS</text>
+
+  <!-- Step 2: Returns CNAME (CoreDNS -> CLIENT POD) -->
+  <path d="M 107.5 255 L 107.5 220 Q 107.5 210 117.5 210 L 353 210" fill="none" stroke="#80868b" stroke-width="1.2" marker-end="url(#arrow)" />
+  <rect x="135" y="197" width="205" height="26" rx="13" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" />
+  <circle cx="149" cy="210" r="9" fill="#1e3a8a" />
+  <text x="149" y="214" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+  <text x="247" y="214" text-anchor="middle" font-size="11.5" fill="#334155">Returns CNAME (externalName)</text>
+
+  <!-- Step 3: Resolves external hostname (CLIENT POD -> Upstream DNS) -->
+  <path d="M 550 185 L 550 132 Q 550 122 560 122 L 668 122 M 840 122 L 928 122" fill="none" stroke="#80868b" stroke-width="1.2" marker-end="url(#arrow)" />
+  <rect x="425" y="110" width="215" height="26" rx="13" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" />
+  <circle cx="439" cy="123" r="9" fill="#1e3a8a" />
+  <text x="439" y="127" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+  <text x="541" y="127" text-anchor="middle" font-size="11.5" fill="#334155">Resolves CNAME to external IP</text>
+
+  <!-- Step 4: Direct TCP Connection (CLIENT POD -> External Service) -->
+  <path d="M 620 250 L 928 250" fill="none" stroke="#80868b" stroke-width="1.2" marker-end="url(#arrow)" />
+  <rect x="685" y="237" width="195" height="26" rx="13" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" />
+  <circle cx="699" cy="250" r="9" fill="#92400e" />
+  <text x="699" y="254" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">4</text>
+  <text x="791" y="254" text-anchor="middle" font-size="11.5" fill="#334155">Direct traffic (bypasses proxy)</text>
+
+  <!-- Step 5: Response (External Service -> CLIENT POD, Dashed Line) -->
+  <path d="M 1072.5 315 L 1072.5 340 Q 1072.5 350 1062.5 350 L 500 350 Q 490 350 490 340 L 490 307" fill="none" stroke="#80868b" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrow)" />
+  <rect x="705" y="337" width="165" height="26" rx="13" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" />
+  <circle cx="719" cy="350" r="9" fill="#92400e" />
+  <text x="719" y="354" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">5</text>
+  <text x="796" y="354" text-anchor="middle" font-size="11.5" fill="#334155">Direct response to Pod</text>
+</svg>

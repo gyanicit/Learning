@@ -10,4 +10,4 @@ spec:
     - protocol: TCP
       port: 80           # Port exposed internally inside the cluster (ClusterIP)
       targetPort: 80     # Port your container is listening on
-      nodePort: 30080    # Optional: External port on every Node (range: 30000-32767)
+#      nodePort: 30080    # Optional: External port on every Node (range: 30000-32767)

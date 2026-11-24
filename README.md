@@ -57,11 +57,20 @@ This file links to the documents and configuration files in this repository, gro
 ### Networking
 ### K8s Service
 - [Service](k8s/networking/k8s-Service/README.md) — Service types, ports, creation, connections, and troubleshooting.
-- [NodePort Service Manifest](k8s/networking/k8s-Service/nodeport-service.yaml) — Example NodePort Service manifest.
-  - [Access NodePort Service](k8s/networking/k8s-Service/access-nodeport.md) — How to access NodePort Service Type.
-- [LoadBalancer Service Manifest](k8s/networking/k8s-Service/load-balancer-service.yaml) — Example LoadBalancer Service manifest.
-- [ClusterIP Service Manifest](k8s/networking/k8s-Service/cluster-ip-service.yaml) — Example ClusterIP Service manifest.
-- [ExternalName Service Manifest](k8s/networking/k8s-Service/external-name-service.yaml) — Example ExternalName Service manifest.
+- NodePort
+  - [NodePort Service Guide](k8s/networking/k8s-Service/NodePort/README.md) — NodePort Service Guide. 
+  - [NodePort Service Manifest](k8s/networking/k8s-Service/NodePort/nodeport-service.yaml) — Example NodePort Service manifest.
+    - [Access NodePort Service](k8s/networking/k8s-Service/NodePort/access-nodeport.md) — How to access pod outside the cluster using NodePort Service type.
+- ClusterIP
+  - [ClusterIP Service Guide](k8s/networking/k8s-Service/ClusterIP/README.md) — ClusterIP Service Guide.
+  - [ClusterIP Service Manifest](k8s/networking/k8s-Service/ClusterIP/cluster-ip-service.yaml) — Example ClusterIP Service manifest.
+- LoadBalancer
+  - [LoadBalancer Service Guide](k8s/networking/k8s-Service/LoadBalancer/README.md) — LoadBalancer Service Guide.
+  - [LoadBalancer Service Manifest](k8s/networking/k8s-Service/LoadBalancer/load-balancer-service.yaml) — Example LoadBalancer Service manifest.
+- External Name
+  - [ExternalName Service Guide](k8s/networking/k8s-Service/ExternalName/README.md) — ExternalName Service Guide.
+  - [ExternalName Service Manifest](k8s/networking/k8s-Service/ExternalName/external-name-service.yaml) — Example ExternalName Service manifest.
+
 ### Ingress
 - [Ingress](k8s/networking/Ingress/README.md) — Ingress creation, editing, and Minikube setup.
 
